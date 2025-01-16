@@ -27,10 +27,7 @@ Este es el repositorio del frontend para la tienda Alura Geek.
 
 ## Uso
 
-Para iniciar la aplicación en modo de desarrollo, ejecuta:
-```bash
-npm start
-```
+Para iniciar la aplicación seria entrar al live server
 
 La aplicación estará disponible en `http://localhost:3000`.
 
