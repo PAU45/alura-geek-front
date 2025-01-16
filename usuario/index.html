@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tienda</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/css/splide.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+   
+    <style>
+        .splide {
+            width: 100vw; /* Ocupa todo el ancho de la ventana */
+            margin: 0 auto; /* Centra el slider horizontalmente */
+        }
+
+        .splide__slide img {
+            width: 100%;
+            height: 500px; /* Mantiene la altura fija */
+            object-fit: cover; /* Asegura que la imagen cubra el contenedor */
+        }
+    </style>
+</head>
+<body class="bg-[#fafafa] flex flex-col items-center">
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center w-full">
+        <div class="logo">
+            <a href="/front/front-tienda/usuario/index.html"><img src="img/1692260796679.png" alt="Logo" class="h-10"></a>
+        </div>
+        <div class="search-box flex items-center w-full max-w-lg">
+            <input type="text" placeholder="Buscar..." class="border border-gray-300 rounded-l px-4 py-2 w-full">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-r">Buscar</button>
+        </div>
+        <ul class="flex space-x-4">
+            <li>
+                <a href="/front/front-tienda/usuario/mejores.html" class="text-gray-700 hover:text-blue-500">Mejores Productos</a>
+            </li>
+            <li>
+                <a href="/front/front-tienda/usuario/descuentos.html" class="text-gray-700 hover:text-blue-500">Mejores Ofertas</a>
+            </li>
+           
+            <li>
+                <a href="/front/front-tienda/usuario/carrito.html" class="text-gray-700 hover:text-blue-500"><i class="fas fa-shopping-cart"></i> Carrito de Compra</a>
+            </li>
+            <li id="auth-links">
+                <a href="/front/front-tienda/usuario/login/login.html" class="text-gray-700 hover:text-blue-500">Registrarse</a>
+            </li>
+        </ul>
+    </nav>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const nombre = localStorage.getItem('nombre');
+          const authLinks = document.getElementById('auth-links');
+
+          if (nombre) {
+              authLinks.innerHTML = `
+                  <span class="text-gray-700">Hola, ${nombre}</span>
+                  <button id="logout-btn" class="ml-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cerrar Sesión</button>
+              `;
+              
+              document.getElementById('logout-btn').addEventListener('click', function() {
+                  localStorage.removeItem('token');
+                  localStorage.removeItem('nombre');
+                  window.location.href = '/front/front-tienda/usuario/login/login.html';
+              });
+          }
+      });
+  </script>
+     <!-- Primer deslizador (splide) -->
+        <!-- Primer deslizador (splide) -->
+    <div class="container_slider mt-8 w-full">
+      <div class="splide">
+          <div class="splide__track">
+              <ul class="splide__list">
+                  <li class="splide__slide"><img src="promociones/1.png" alt=""></li>
+                  <li class="splide__slide"><img src="promociones/2.png" alt=""></li>
+                  <li class="splide__slide"><img src="promociones/3.png" alt=""></li>
+                  <li class="splide__slide"><img src="promociones/4.png" alt=""></li>
+              </ul>
+          </div>
+          <div class="splide__arrows">
+              <button class="splide__arrow splide__arrow--prev">❰</button>
+              <button class="splide__arrow splide__arrow--next">❱</button>
+          </div>
+      </div>
+  </div>
+
+
+
+
+  <!-- Segundo deslizador (swiper) -->
+  <h2 class="text-2xl font-bold mb-6  mt-8 text-center">Tipos de productos</h2>
+  <div class="container swiper">
+      <div class="slide-container">
+          <div class="card-wrapper swiper-wrapper" id="card-wrapper">
+              <!-- Las tarjetas de productos se agregarán aquí dinámicamente -->
+          </div>
+          <div class="swiper-button-next swiper-navBtn">❯</div>
+          <div class="swiper-button-prev swiper-navBtn">❮</div>
+          <div class="swiper-pagination"></div>
+      </div>
+  </div>
+
+  <script src="js/swiper-bundle.min.js"></script>
+  <script>
+      async function fetchCategories() {
+          const response = await fetch('http://localhost:3000/api/categories');
+          const categories = await response.json();
+          const cardWrapper = document.getElementById('card-wrapper');
+
+          categories.forEach(category => {
+              // Agregar tarjetas de productos
+              const cardItem = document.createElement('div');
+              cardItem.className = 'card swiper-slide';
+              cardItem.innerHTML = `
+                  <div class="image-box">
+                      <img src="${category.imagen_url}" alt="${category.nombre}" width="500" height="500">
+                  </div>
+                  <div class="profile-details">
+                      <div class="name-job">
+                          <h3 class="name">${category.nombre}</h3>
+                      </div>
+                  </div>
+              `;
+              cardWrapper.appendChild(cardItem);
+          });
+
+          // Inicializar Swiper para el segundo deslizador
+          new Swiper('.swiper', {
+              slidesPerView: 1,
+              spaceBetween: 10,
+              pagination: {
+                  el: '.swiper-pagination',
+                  clickable: true,
+              },
+              navigation: {
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+              },
+              breakpoints: {
+                  640: {
+                      slidesPerView: 2,
+                      spaceBetween: 20,
+                  },
+                  768: {
+                      slidesPerView: 3,
+                      spaceBetween: 30,
+                  },
+                  1024: {
+                      slidesPerView: 4,
+                      spaceBetween: 40,
+                  },
+              },
+          });
+      }
+
+      document.addEventListener('DOMContentLoaded', fetchCategories);
+  </script>
+
+  <script src="js/scripts.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          var splide = new Splide('.splide', {
+              type: 'loop',
+              autoplay: true,
+              interval: 2000,
+          });
+          splide.mount();
+      });
+  </script>
+
+<div class="container mx-auto py-8">
+  <h2 class="text-2xl font-bold mb-6 text-center">Nuestros Productos</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="product-grid">
+      <!-- Los productos se agregarán aquí dinámicamente -->
+  </div>
+</div>
+
+<script>
+  // Función para agregar productos al carrito
+  function addToCart(id, name, price, image) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingProductIndex = cart.findIndex(product => product.id === id);
+
+      if (existingProductIndex !== -1) {
+          cart[existingProductIndex].quantity += 1;
+      } else {
+          cart.push({ id, name, price, quantity: 1, image });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Producto agregado al carrito');
+  }
+
+  // Función para obtener y mostrar los productos
+  async function fetchProducts() {
+      try {
+          const response = await fetch('http://localhost:3000/api/products');
+          const products = await response.json();
+          const productGrid = document.getElementById('product-grid');
+
+          products.forEach(product => {
+              const productItem = document.createElement('div');
+              productItem.className = 'bg-white shadow-md rounded-lg overflow-hidden flex flex-col';
+              productItem.innerHTML = `
+                  <img src="${product.imagen_url || 'default-image.jpg'}" alt="${product.name}" class="w-full h-48 object-cover">
+                  <div class="p-4 flex flex-col flex-grow">
+                      <h3 class="text-xl font-semibold">${product.name}</h3>
+                      <p class="text-gray-600 mt-2">$${product.price}</p>
+                      <p class="text-gray-600 mt-2">${product.description}</p>
+                      <button class="mt-auto bg-blue-500 text-white py-2 rounded hover:bg-blue-600" onclick="addToCart(${product.id}, '${product.name}', ${product.price}, '${product.imagen_url || 'default-image.jpg'}')">Agregar al carrito</button>
+                  </div>
+              `;
+              productGrid.appendChild(productItem);
+          });
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  }
+
+  fetchProducts();
+</script>
+
+
+<div class="relative overflow-hidden bg-[#fafafa] py-15 whitespace-nowrap mt-4 slider-container">
+  <div class="absolute inset-y-0 left-0 w-[250px] z-10 bg-gradient-to-l from-transparent to-[#fafafa]"></div>
+  <div class="absolute inset-y-0 right-0 w-[250px] z-10 bg-gradient-to-r from-transparent to-[#fafafa]"></div>
+  <div class="logos-container flex animate-slide">
+    <div class="flex items-center space-x-10 px-4">
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/Louis-Vuitton-logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[100px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/nike-logo-1995.png" alt="Nike Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/3-poloski-adidas-logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/Alexander-McQueen-logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/Chanel_logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+    
+    <div class="flex items-center space-x-10 px-4">
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/Louis-Vuitton-logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[100px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/nike-logo-1995.png" alt="Nike Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/3-poloski-adidas-logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/Alexander-McQueen-logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+      <div class="w-[150px] h-[50px] flex items-center justify-center">
+        <img src="/front/front-tienda/usuario/promociones/Chanel_logo.png" alt="Google Logo" class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <style>
+    @keyframes slide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  
+    .animate-slide {
+      animation: slide 20s linear infinite;
+      display: flex;
+      width: 200%; /* Doble ancho para crear efecto de bucle */
+    }
+  
+    .logos-container:hover {
+      animation-play-state: paused;
+    }
+  </style>
+    
+
+    <footer class="bg-[#ffffff] text-black py-8 mt-8 w-full shadow-lg border-t border-gray-200">
+      <div class="container mx-auto px-4">
+          <div class="flex flex-wrap justify-between">
+              <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                  <h3 class="text-xl font-bold mb-4">Sobre Nosotros</h3>
+                  <p class="text-gray-600">Somos una tienda dedicada a ofrecer los mejores productos a los mejores precios. Nuestra misión es proporcionar una experiencia de compra excepcional.</p>
+              </div>
+              <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                  <h3 class="text-xl font-bold mb-4">Enlaces Rápidos</h3>
+                  <ul class="text-gray-600">
+                      <li class="mb-2"><a href="#" class="hover:text-blue-500">Inicio</a></li>
+                      <li class="mb-2"><a href="#" class="hover:text-blue-500">Productos</a></li>
+                      <li class="mb-2"><a href="#" class="hover:text-blue-500">Ofertas</a></li>
+                      <li class="mb-2"><a href="#" class="hover:text-blue-500">Contacto</a></li>
+                  </ul>
+              </div>
+              <div class="w-full md:w-1/3">
+                  <h3 class="text-xl font-bold mb-4">Contáctanos</h3>
+                  <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>123 Calle Principal, Ciudad, País</p>
+                  <p class="text-gray-600 mb-2"><i class="fas fa-phone mr-2"></i>(123) 456-7890</p>
+                  <p class="text-gray-600"><i class="fas fa-envelope mr-2"></i>info@tienda.com</p>
+              </div>
+          </div>
+          <div class="mt-8 text-center text-gray-600">
+              &copy; 2023 Tienda. Todos los derechos reservados.
+          </div>
+      </div>
+  </footer>
+  </body>
+  </html>

@@ -1,0 +1,63 @@
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Métodos de Pago</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gestión de Métodos de Pago</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Usuario</th>
+                    <th>Producto</th>
+                    <th>Total</th>
+                    <th>Método de Pago</th>
+                    <th>Fecha</th>
+                    <th>Estado del Pago</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#001</td>
+                    <td>Usuario1</td>
+                    <td>Carrito 1</td>
+                    <td>25.00</td>
+                    <td>Tarjeta de Crédito</td>
+                    <td>2024-11-01</td>
+                    <td>Pendiente</td>
+                    <td>
+                        <a href="#editModal" class="btn">Editar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <a href="#" class="close-modal">&times;</a>
+            <h2>Editar Método de Pago</h2>
+            <form>
+                <div class="filter-item">
+                    <label for="nuevoMetodoPago">Nuevo Método de Pago:</label>
+                    <select id="nuevoMetodoPago">
+                        <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="contra_reembolso">Contra Reembolso</option>
+                        <option value="contra_reembolso">Yape</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

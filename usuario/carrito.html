@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center w-full">
+        <div class="logo">
+            <a href="/front/front-tienda/usuario/index.html"><img src="img/1692260796679.png" alt="Logo" class="h-10"></a>
+        </div>
+        <div class="search-box flex items-center w-full max-w-lg">
+            <input type="text" placeholder="Buscar..." class="border border-gray-300 rounded-l px-4 py-2 w-full">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-r">Buscar</button>
+        </div>
+        <ul class="flex space-x-4">
+            <li>
+                <a href="/front/front-tienda/usuario/mejores.html" class="text-gray-700 hover:text-blue-500">Mejores Productos</a>
+            </li>
+            <li>
+                <a href="/front/front-tienda/usuario/descuentos.html" class="text-gray-700 hover:text-blue-500">Mejores Ofertas</a>
+            </li>
+           
+            <li>
+                <a href="/front/front-tienda/usuario/carrito.html" class="text-gray-700 hover:text-blue-500"><i class="fas fa-shopping-cart"></i> Carrito de Compra</a>
+            </li>
+            <li id="auth-links">
+                <a href="/front/front-tienda/usuario/login/login.html" class="text-gray-700 hover:text-blue-500">Registrarse</a>
+            </li>
+        </ul>
+    </nav>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const nombre = localStorage.getItem('nombre');
+          const authLinks = document.getElementById('auth-links');
+
+          if (nombre) {
+              authLinks.innerHTML = `
+                  <span class="text-gray-700">Hola, ${nombre}</span>
+                  <button id="logout-btn" class="ml-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cerrar Sesión</button>
+              `;
+              
+              document.getElementById('logout-btn').addEventListener('click', function() {
+                  localStorage.removeItem('token');
+                  localStorage.removeItem('nombre');
+                  window.location.href = '/front/front-tienda/usuario/login/login.html';
+              });
+          }
+      });
+  </script>
+
+    <!-- Contenido del carrito -->
+    <div class="container mx-auto px-4 pt-20">
+        <h1 class="text-2xl font-bold mb-6">Carrito de Compras</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Lista de productos -->
+            <div class="lg:col-span-2">
+                <div id="cart-items" class="space-y-4">
+                    <!-- Los items del carrito se agregarán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Resumen del carrito -->
+            <div class="bg-white p-6 rounded-lg shadow-md h-fit">
+                <h2 class="text-xl font-semibold mb-4">Resumen del pedido</h2>
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Envío</span>
+                        <span id="shipping">$5.00</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="flex justify-between font-semibold">
+                        <span>Total</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+                <button id="checkout-btn" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                    Proceder al pago
+                </button>
+            </div>
+        </div>
+
+        <!-- Elemento para mostrar la respuesta -->
+        <h2 id="order-response" class="text-xl font-semibold mt-8"></h2>
+        <!-- Elemento para mostrar las órdenes -->
+        <div id="orders" class="mt-8"></div>
+    </div>
+
+    <script>
+        // Función para obtener el carrito del localStorage
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart')) || [];
+        }
+
+        // Función para guardar el carrito en localStorage
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Función para actualizar la vista del carrito
+        function updateCartView() {
+            const cart = getCart();
+            const cartItems = document.getElementById('cart-items');
+            const subtotal = document.getElementById('subtotal');
+            const total = document.getElementById('total');
+            
+            cartItems.innerHTML = '';
+            let subtotalAmount = 0;
+
+            cart.forEach((item, index) => {
+                subtotalAmount += item.price * item.quantity;
+                
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex items-center bg-white p-4 rounded-lg shadow-md';
+                itemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded">
+                    <div class="ml-4 flex-grow">
+                        <h3 class="font-semibold">${item.name}</h3>
+                        <p class="text-gray-600">$${item.price}</p>
+                        <div class="flex items-center mt-2">
+                            <button onclick="updateQuantity(${index}, -1)" class="bg-gray-200 px-2 rounded-l">-</button>
+                            <span class="px-4 bg-gray-100">${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)" class="bg-gray-200 px-2 rounded-r">+</button>
+                            <button onclick="removeItem(${index})" class="ml-4 text-red-500">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                cartItems.appendChild(itemElement);
+            });
+
+            subtotal.textContent = `$${subtotalAmount.toFixed(2)}`;
+            total.textContent = `$${(subtotalAmount + 5).toFixed(2)}`;
+        }
+
+        // Función para actualizar la cantidad de un item
+        function updateQuantity(index, change) {
+            const cart = getCart();
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity < 1) {
+                cart.splice(index, 1);
+            }
+            
+            saveCart(cart);
+            updateCartView();
+        }
+
+        // Función para eliminar un item
+        function removeItem(index) {
+            const cart = getCart();
+            cart.splice(index, 1);
+            saveCart(cart);
+            updateCartView();
+        }
+
+        // Inicializar la vista del carrito
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateCartView();
+
+            const token = localStorage.getItem('token'); // Obtener el token del localStorage
+
+            if (!token) {
+                alert('No se encontró el token. Por favor, inicie sesión.');
+                window.location.href = '/front/front-tienda/usuario/login/login.html';
+                return;
+            }
+
+            try {
+                // Obtener información del usuario
+                console.log('Intentando obtener información del usuario...');
+                const userResponse = await fetch('http://localhost:3000/api/users/me', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const userData = await userResponse.json();
+                console.log('Respuesta del usuario:', userData);
+
+                if (!userResponse.ok) {
+                    alert('Error al obtener información del usuario');
+                    return;
+                }
+
+                console.log('Información del usuario obtenida:', userData); // Depuración
+
+                // Obtener todas las órdenes y filtrar las del usuario autenticado
+                console.log('Intentando obtener todas las órdenes...');
+                const ordersResponse = await fetch('http://localhost:3000/api/orders', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const ordersData = await ordersResponse.json();
+                console.log('Todas las órdenes:', ordersData);
+
+                if (!ordersResponse.ok) {
+                    alert('Error al obtener las órdenes');
+                    return;
+                }
+
+                // Filtrar las órdenes del usuario autenticado
+                const userOrders = ordersData.filter(order => order.user_id === userData.id);
+                console.log('Órdenes del usuario:', userOrders);
+
+                // Mostrar las órdenes en el elemento div
+                const ordersElement = document.getElementById('orders');
+                userOrders.forEach(order => {
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
+                    orderElement.innerHTML = `
+                        <h3 class="font-semibold">Orden #${order.id}</h3>
+                        <p>Total: $${order.total}</p>
+                        <p>Estado: ${order.status}</p>
+                        <p>Fecha: ${new Date(order.created_at).toLocaleDateString()}</p>
+                    `;
+                    ordersElement.appendChild(orderElement);
+                });
+            } catch (error) {
+                console.error('Error al obtener información del usuario o las órdenes:', error);
+                alert('Error al obtener información del usuario o las órdenes');
+            }
+        });
+
+        // Manejar el botón de checkout
+        document.getElementById('checkout-btn').addEventListener('click', async () => {
+            const cart = getCart();
+            const token = localStorage.getItem('token'); // Obtener el token del localStorage
+
+            if (!token) {
+                alert('No se encontró el token. Por favor, inicie sesión.');
+                window.location.href = '/front/front-tienda/usuario/login/login.html';
+                return;
+            }
+
+            try {
+                // Obtener información del usuario
+                const userResponse = await fetch('http://localhost:3000/api/users/me', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const userData = await userResponse.json();
+
+                if (!userResponse.ok) {
+                    alert('Error al obtener información del usuario');
+                    return;
+                }
+
+                console.log('Información del usuario:', userData); // Depuración
+
+                // Asegurarse de que cada producto tenga un product_id y una cantidad
+                const products = cart.map(item => ({
+                    product_id: item.id,
+                    quantity: item.quantity
+                }));
+
+                fetch('http://localhost:3000/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        user_id: userData.id, // Usar el ID del usuario autenticado
+                        products: products,
+                        total: parseFloat(document.getElementById('total').textContent.replace('$', '')),
+                        status: 'completed'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Respuesta de la creación de la orden:', JSON.stringify(data, null, 2)); // Depuración
+                    const orderResponse = document.getElementById('order-response');
+                    orderResponse.textContent = JSON.stringify(data, null, 2); // Mostrar la respuesta en el elemento h2
+                    if (data.error) {
+                        alert(`Error: ${data.error}`);
+                    } else {
+                        alert('Orden creada exitosamente');
+                        localStorage.removeItem('cart'); // Limpiar el carrito después de crear la orden
+                        updateCartView();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al crear la orden:', error);
+                    alert('Error al crear la orden');
+                });
+            } catch (error) {
+                console.error('Error al obtener información del usuario:', error);
+                alert('Error al obtener información del usuario');
+            }
+        });
+    </script>
+</body>
+</html>

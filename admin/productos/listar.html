@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+<body>
+
+<div class="container">
+    <h1>Lista de Productos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Producto</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>001</td>
+                <td>Producto 1</td>
+                <td>Descripción del Producto 1</td>
+                <td>$10.00</td>
+                <td>
+                    <a href="editar.html?id=001" class="btn btn-edit">Editar</a>
+                    <a href="editar.html?id=001&action=delete" class="btn btn-delete">Eliminar</a>
+                </td>
+            </tr>
+            <tr>
+                <td>002</td>
+                <td>Producto 2</td>
+                <td>Descripción del Producto 2</td>
+                <td>$15.00</td>
+                <td>
+                    <a href="editar.html?id=002" class="btn btn-edit">Editar</a>
+                    <a href="editar.html?id=002&action=delete" class="btn btn-delete">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

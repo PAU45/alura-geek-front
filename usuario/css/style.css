@@ -1,0 +1,223 @@
+body {
+    background: #fafafa;
+    margin: 0; /* Eliminar margen por defecto */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container_slider {
+    width: 100vw; /* Cambiar a 100vw para ocupar todo el ancho de la ventana */
+    height: 500px; /* Ajusta la altura según lo que necesites */
+    padding: 0; /* Eliminar padding */
+    margin: 0;
+    background: #fafafa;
+    position: relative; /* Cambiar a relative para evitar problemas de posicionamiento */
+    overflow: hidden; /* Evitar desbordamiento */
+    display: flex; /* Para centrar el contenido dentro del contenedor */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+}
+
+img {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    object-fit: contain; /* Mantiene la proporción de la imagen */
+    cursor: pointer;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:#fafafa;
+}
+.container.swiper{
+    margin-top: 30px;
+
+}
+.container {
+  max-width: 1120px;
+  width: 100%;
+  padding: 40px 0;
+}
+.slide-container {
+  margin: 0 30px;
+  overflow: hidden;
+}
+.card {
+  background: #fff;
+  border-radius: 8px;
+}
+.card .image-box {
+  height: 200px;
+}
+.card .image-box img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px 8px 0 0;
+}
+.card .profile-details {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+  padding: 15px;
+}
+.card .profile-details img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+.profile-details .name {
+  font-size: 15px;
+  font-weight: 500;
+}
+.profile-details .job {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4d4d4d;
+}
+.swiper-navBtn {
+    color: #000; /* Color del icono */
+    height: 40px; /* Altura del botón */
+    width: 40px; /* Ancho del botón */
+    background: #fff; /* Fondo del botón */
+    border-radius: 50%; /* Forma circular */
+    display: flex; /* Flexbox para centrar el contenido */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para mejor apariencia */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background 0.3s; /* Transición suave para el fondo */
+    position: absolute; /* Posición absoluta para mantener los botones en su lugar */
+    top: 50%; /* Centrar verticalmente */
+    transform: translateY(-50%); /* Ajustar la posición vertical */
+    z-index: 10; /* Asegurar que los botones estén por encima del contenido */
+}
+
+.swiper-button-next {
+    right: 10px; /* Ajustar la posición del botón siguiente */
+}
+
+.swiper-button-prev {
+    left: 10px; /* Ajustar la posición del botón anterior */
+}
+
+.swiper-navBtn:hover {
+    background:#fafafa; /* Fondo al pasar el cursor */
+}
+
+.swiper-pagination-bullet {
+    background-color: #000; /* Color de los puntos de paginación */
+}
+
+@media screen and (max-width: 768px) {
+    .swiper-navBtn {
+        display: none; /* Ocultar botones en pantallas pequeñas */
+    }
+}
+
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Ajusta automáticamente el número de columnas */
+  grid-gap: 20px;
+  width: 100%;
+  max-width: 100%; /* Tamaño máximo del grid */
+  margin: 0 auto; /* Centrar el grid horizontalmente */
+}
+
+.product-item {
+  background-color: #b70eff;
+  border: 1px solid #d50303;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Asegura que las imágenes no se salgan del contenedor */
+}
+
+.product-item img {
+  width: 100%; /* Ajusta el ancho de la imagen al 100% del contenedor */
+  height: auto; /* Mantiene la proporción de la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra todo el contenedor sin distorsionarse */
+  transition: transform 0.3s ease; /* Añade una transición suave para el efecto */
+}
+
+.product-item img:hover {
+  transform: scale(1.1); /* Aumenta ligeramente el tamaño de la imagen al pasar el cursor */
+}
+
+.slider-container {
+  width: 100%;
+  max-width: 2000px;
+  height: 200px;
+  margin: 0 auto; /* Centrar el slider horizontalmente */
+}
+
+.animate-slide {
+  animation: slide 20s linear infinite;
+  display: flex;
+  width: 200%; /* Doble ancho para crear efecto de bucle */
+}
+
+.logos-container {
+  display: flex;
+  align-items: center;
+  height: 100%; /* Asegura que las imágenes se ajusten a la altura del contenedor */
+}
+
+.logos-container:hover {
+  animation-play-state: paused;
+}
+
+.logos-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Asegura que las imágenes se ajusten al contenedor sin distorsionarse */
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.logos {
+  overflow: hidden;
+  padding: 60px 0;
+  background: #fafafa;
+  white-space: nowrap;
+  position: relative;
+}
+
+.logos:before,
+.logos:after {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  content: "";
+  z-index: 2;
+}
+
+.logos:before {
+  left: 0;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0),#fafafa);
+}
+
+.logos:after {
+  right: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0),#fafafa);
+}
