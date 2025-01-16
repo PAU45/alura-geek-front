@@ -37,7 +37,7 @@ La aplicación estará disponible en `http://localhost:3000`.
 ## Enlace al Backend
 
 El repositorio del backend de la tienda se encuentra en el siguiente enlace:
-[Backend Alura Geek](https://github.com/tu-usuario/back-alura-geek)
+[Backend Alura Geek](https://github.com/PAU45/back-alura-geek)
 
 ## Contribuciones
 
