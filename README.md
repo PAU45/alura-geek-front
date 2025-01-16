@@ -8,7 +8,7 @@ Este es el repositorio del frontend para la tienda Alura Geek.
 - HTML
 - CSS
 - JavaScript
-- React
+- express
 
 ## Instalación
 
